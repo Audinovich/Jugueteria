@@ -1,12 +1,16 @@
 package Crud.veterinaria.Model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity // se va a transformar en BD
 public class Usuario {
+
+    //Crea relacion OneToMany de usuarios a mascotas
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private List<Mascota> mascotas = new ArrayList<>();
 
     @Id
 //genera valor id automaticamente- solo impacta al primer atributo

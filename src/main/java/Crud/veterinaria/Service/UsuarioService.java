@@ -18,7 +18,10 @@ public interface UsuarioService {
 
     boolean authenticate(String name, String password);
 
+    boolean getAuthenticatedUser (String clienteId);
+
     Optional <Usuario> updateUsuario(Usuario u, long id);
 
     boolean deleteAllUsuario();
+
 }

@@ -51,6 +51,13 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
+    public boolean getAuthenticatedUser(String clienteId) {
+        Optional<Usuario> usuarioLogin = usuarioRepository.findByName(clienteId);
+        return usuarioLogin.isPresent();
+    }
+
+
+    @Override
     public Optional <Usuario> updateUsuario(Usuario u, long id) {
         Optional<Usuario> usuarioEncontrado = usuarioRepository.findById(id);
 

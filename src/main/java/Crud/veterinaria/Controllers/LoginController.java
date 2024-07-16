@@ -48,10 +48,10 @@ public class LoginController {
 
         if (loginSuccess) {
             System.out.println("ingresado CORRECTAMENTE - name: " + name + " - password: " + password);
-            return "Index";
+            return "Main";
         } else {
             System.out.println("INGRESO FALLIDO- name: " + name + " - password: " + password);
-            return "Alta";
+            return "Login";
         }
     }
 }

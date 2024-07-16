@@ -18,6 +18,7 @@ public class ApiUsuario {
     @Autowired
     UsuarioService usuarioService;
 
+
     //SOLCITUDES HTTP GET
     @GetMapping("/all")
     public ArrayList<Usuario> getAllUsuario() {
@@ -52,11 +53,11 @@ public class ApiUsuario {
     }
 
     @DeleteMapping("/delete/all")
-    public String deleteAllUsuario (){
+    public String deleteAllUsuario() {
         boolean resultado = usuarioService.deleteAllUsuario();
-        if(resultado){
+        if (resultado) {
             return "Se han eliminado todos los usuarios";
-        }else{
+        } else {
             return "No se han eliminado todos los usuarios";
         }
     }

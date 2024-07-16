@@ -2,7 +2,9 @@ package Crud.veterinaria.Controllers;
 
 
 import Crud.veterinaria.Model.Mascota;
+import Crud.veterinaria.Model.Usuario;
 import Crud.veterinaria.Service.MascotaService;
+import Crud.veterinaria.Service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +19,9 @@ public class ApiMascota {
     @Autowired
     MascotaService mascotaService;
 
+    @Autowired
+    UsuarioService usuarioService;
+
 
     @GetMapping("/all")
     public ArrayList<Mascota> getAllMascota() {
@@ -29,14 +34,18 @@ public class ApiMascota {
     }
 
     @PutMapping("/edith/{id}")
-    public Optional<Mascota> updateMascota(@RequestBody Mascota m, @PathVariable("id") long id) {
+    public Optional<Mascota> updateMascota(@RequestBody Mascota m, @PathVariable("id") long id,@RequestParam long usuarioId) {
+        Usuario usuario = usuarioService.getUsuarioById(usuarioId).orElseThrow(()-> new RuntimeException("Usuario No Encontrado"));
+        m.setUsuario(usuario);
         return mascotaService.updateMascota(m, id);
     }
 
     @PostMapping("/save")
-    public Mascota saveMascota(@RequestBody Mascota m) {
+    public Mascota saveMascota(@RequestBody Mascota m ) {
         return mascotaService.saveMascota(m);
     }
+
+
 
     @DeleteMapping("/delete/{id}")
     public String deleteMascotaById(@PathVariable("id") long id) {
