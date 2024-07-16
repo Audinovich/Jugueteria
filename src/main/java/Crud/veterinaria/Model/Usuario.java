@@ -1,5 +1,7 @@
 package Crud.veterinaria.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -10,7 +12,17 @@ public class Usuario {
 
     //Crea relacion OneToMany de usuarios a mascotas
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    @JsonManagedReference
+
     private List<Mascota> mascotas = new ArrayList<>();
+
+    public List<Mascota> getMascotas() {
+        return mascotas;
+    }
+
+    public void setMascotas(List<Mascota> mascotas) {
+        this.mascotas = mascotas;
+    }
 
     @Id
 //genera valor id automaticamente- solo impacta al primer atributo

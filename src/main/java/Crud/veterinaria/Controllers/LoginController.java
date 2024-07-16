@@ -1,5 +1,6 @@
 package Crud.veterinaria.Controllers;
 
+import Crud.veterinaria.Model.Usuario;
 import Crud.veterinaria.Service.UsuarioService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,10 +45,12 @@ public class LoginController {
     public String login(@RequestParam("name") String name, @RequestParam("password") String password, Model model) {
 
         System.out.println("Intento de login - name: " + name + " - password: " + password);
-        boolean loginSuccess = usuarioService.authenticate(name, password);
+        Usuario usuario = usuarioService.authenticate(name, password);
 
-        if (loginSuccess) {
+        if (usuario != null) {
             System.out.println("ingresado CORRECTAMENTE - name: " + name + " - password: " + password);
+            System.out.println("ID del usuario: " + usuario.getId());
+            model.addAttribute("usuario_id", usuario.getId()); // Agrega el ID del usuario al modelo
             return "Main";
         } else {
             System.out.println("INGRESO FALLIDO- name: " + name + " - password: " + password);

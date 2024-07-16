@@ -16,7 +16,7 @@ public interface UsuarioService {
 
     boolean deleteUsuarioById(long id);
 
-    boolean authenticate(String name, String password);
+    Usuario authenticate(String name, String password);
 
     boolean getAuthenticatedUser (String clienteId);
 

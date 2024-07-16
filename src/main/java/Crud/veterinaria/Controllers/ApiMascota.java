@@ -42,6 +42,8 @@ public class ApiMascota {
 
     @PostMapping("/save")
     public Mascota saveMascota(@RequestBody Mascota m ) {
+        Usuario usuario = usuarioService.getUsuarioById(m.getUsuario().getId()).orElseThrow(()-> new RuntimeException("Usuario No Encontrado"));
+        m.setUsuario(usuario);
         return mascotaService.saveMascota(m);
     }
 
