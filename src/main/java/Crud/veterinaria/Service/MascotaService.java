@@ -11,6 +11,10 @@ public interface MascotaService {
 
     Optional<Mascota> getMascotaById(long id);
 
+
+    //TODO:CAMBIAR NOMBRE DEL PARAMETRO A usuarioId
+    ArrayList<Mascota> findAllMascotaByUsuario(long usuarioId);
+
     Mascota saveMascota(Mascota m);
 
     boolean deleteMascotaById(long id);

@@ -10,7 +10,7 @@ public class Mascota {
 
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "usuario_id")
+    @JoinColumn(name = "usuarioId")
     private Usuario usuario;
 
     public Usuario getUsuario() {

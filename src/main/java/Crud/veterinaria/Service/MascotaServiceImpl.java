@@ -27,6 +27,11 @@ public class MascotaServiceImpl implements MascotaService {
     }
 
     @Override
+    public ArrayList<Mascota> findAllMascotaByUsuario(long usuarioId) {
+        return (ArrayList<Mascota>) mascotaRepository.findAllMascotaByUsuario(usuarioId);
+    }
+
+    @Override
     public Optional<Mascota> updateMascota(Mascota m, long id) {
         Optional<Mascota> mascotaEncontrada = mascotaRepository.findById(id);
 
