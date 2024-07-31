@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario de Mascotas</title>
@@ -31,11 +33,20 @@
     <label for="color">Color:</label>
     <input type="text" id="color" name="color" required><br><br>
 
-    <button type="button" onclick="modificarMascota()">Modificar Mascota</button>
+
     <button id="altaMascota" type="button" onclick="agregarMascota()">Agregar Mascota</button>
-    <button type="button" onclick="eliminarMascota()">Eliminar Mascota</button>
     <button type="button" onclick="consultarMascotas()">Consultar Mascota</button>
 
+</form>
+
+<form id="formEditarMascota" style="display:none;">
+    <input type="text" id="editarNombre" placeholder="Nombre">
+    <input type="text" id="editarEspecie" placeholder="Especie">
+    <input type="text" id="editarSexo" placeholder="Sexo">
+    <input type="text" id="editarEdad" placeholder="Edad">
+    <input type="text" id="editarRaza" placeholder="Raza">
+    <input type="text" id="editarColor" placeholder="Color">
+    <button type="button" onclick="guardarCambios()">Guardar Cambios</button>
 </form>
 
 

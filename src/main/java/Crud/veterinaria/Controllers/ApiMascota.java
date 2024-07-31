@@ -42,9 +42,11 @@ public class ApiMascota {
 
 
     @PutMapping("/edith/{id}")
-    public Optional<Mascota> updateMascota(@RequestBody Mascota m, @PathVariable("id") long id, @RequestParam long usuarioId) {
-        Usuario usuario = usuarioService.getUsuarioById(usuarioId).orElseThrow(() -> new RuntimeException("Usuario No Encontrado"));
-        m.setUsuario(usuario);
+    public Optional<Mascota> updateMascota(@RequestBody Mascota m, @PathVariable("id") long id) {
+
+
+        // Usuario usuario = usuarioService.getUsuarioById(usuarioId).orElseThrow(() -> new RuntimeException("Usuario No Encontrado"));
+        //m.setUsuario(usuario);
         return mascotaService.updateMascota(m, id);
     }
 
