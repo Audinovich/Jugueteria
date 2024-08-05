@@ -1,29 +1,53 @@
 package Crud.veterinaria.Model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import org.springframework.boot.autoconfigure.web.WebProperties;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.persistence.*;
 
 @Entity
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Insumo {
+
+    @ManyToOne
+    @JsonBackReference
+    @JoinColumn(name = "practicaId", nullable = true)
+
+    private Practica practica;
+
+    public Practica getPractica() {
+        return practica;
+    }
+
+    public void setPractica(Practica practica) {
+        this.practica = practica;
+    }
+
     @Id
-    @GeneratedValue(strategy = GenerationType .IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String nombre;
     private String descripcion;
     private long cantidad;
+    private long precio;
 
     public Insumo() {
 
     }
 
-    public Insumo(long id, String nombre, String descripcion, long cantidad) {
+    public Insumo(long id, String nombre, String descripcion, long cantidad, long precio) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.cantidad = cantidad;
+        this.precio = precio;
+    }
+
+    public long getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(long precio) {
+        this.precio = precio;
     }
 
     public long getId() {

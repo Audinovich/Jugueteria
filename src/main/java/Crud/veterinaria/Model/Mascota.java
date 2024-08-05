@@ -1,16 +1,37 @@
 package Crud.veterinaria.Model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
-@Entity// se va a transformar en registro de BD
+import java.util.ArrayList;
+import java.util.List;
 
+@Entity// se va a transformar en registro de BD
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Mascota {
 
-    @JsonBackReference
+    // RELACION ONE TO MANY DE MASCOTAS A PRACTICAS
+    @OneToMany(mappedBy = "mascota", cascade = CascadeType.ALL)
+    @JsonManagedReference
+
+    private List<Citas> citas = new ArrayList<>();
+
+    public List<Citas> getCitas() {
+        return citas;
+    }
+
+    public void setCita(List<Citas> citas) {
+        this.citas = citas;
+    }
+
+
+    //RELACION MANY TO ONE ENTRE MUCHAS MASCOTAS Y  UN USUARIOS
+
     @ManyToOne
-    @JoinColumn(name = "usuarioId")
+    @JsonBackReference
+    @JoinColumn(name = "usuarioId", nullable = true)
     private Usuario usuario;
 
     public Usuario getUsuario() {
@@ -45,6 +66,7 @@ public class Mascota {
         this.edad = edad;
         this.raza = raza;
         this.color = color;
+        this.citas = new ArrayList<>();
     }
 
     public long getId() {

@@ -4,7 +4,9 @@ import Crud.veterinaria.Model.Mascota;
 import Crud.veterinaria.Model.Usuario;
 import Crud.veterinaria.Repository.MascotaRepository;
 import Crud.veterinaria.Repository.UsuarioRepository;
+
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +31,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     public Optional<Usuario> getUsuarioById(long id) {
         Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
 
-        if (usuarioOptional.isPresent()){
+        if (usuarioOptional.isPresent()) {
             Usuario usuarioEncontrado = usuarioOptional.get();
 
             List<Mascota> listaDeMascotas = (List<Mascota>) mascotaRepository.findAllMascotaByUsuario(usuarioEncontrado.getId());
@@ -46,7 +48,9 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public Usuario saveUsuario(Usuario u) {
 
-        return usuarioRepository.save(u);
+        Usuario usuarioGuardado = usuarioRepository.save(u);
+
+        return usuarioGuardado;
     }
 
     @Override
@@ -76,6 +80,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
 
+    //TODO AGREGAR MAS METODOS DE LA CLASE
     @Override
     public Optional<Usuario> updateUsuario(Usuario u, long id) {
         Optional<Usuario> usuarioEncontrado = usuarioRepository.findById(id);
