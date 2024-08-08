@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
 
@@ -8,11 +8,13 @@
     <title>Formulario de Mascotas</title>
 </head>
 <body>
-<script src="/js/AltaMascotas.js"></script>
+<input type="hidden" id="usuario_id" th:value="${usuario_id}">
+<script th:src="@{/js/Mascotas.js}"></script>
+
 <h1>Formulario de Mascotas</h1>
 <form id="mascotaForm">
 
-    <input type="hidden" id="usuario_id" th:value="${usuario_id}">
+
 
 
     <label for="nombre">Nombre:</label>
@@ -34,7 +36,7 @@
     <input type="text" id="color" name="color" required><br><br>
 
 
-    <button id="altaMascota" type="button" onclick="agregarMascota()">Agregar Mascota</button>
+    <button id="Mascota" type="button" onclick="agregarMascota()">Agregar Mascota</button>
     <button type="button" onclick="consultarMascotas()">Consultar Mascota</button>
 
 </form>
@@ -49,6 +51,13 @@
     <button type="button" onclick="guardarCambios()">Guardar Cambios</button>
 </form>
 
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var usuarioId = document.getElementById('usuario_id').value;
+        console.log("El valor del usuario_id es: ", usuarioId);
+    });
+</script>
 
 
 </body>

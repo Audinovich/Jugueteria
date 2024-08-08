@@ -16,11 +16,11 @@ public class Practica {
     @OneToMany (mappedBy = "practica", cascade = CascadeType.ALL)
     @JsonManagedReference
 
-    private List<Insumo> insumo = new ArrayList<>();
+    private List<Insumo> insumos = new ArrayList<>();
 
-    public List<Insumo> getInsumos(){return insumo;}
+    public List<Insumo> getInsumos(){return insumos;}
 
-    public void setInsumo(List<Insumo> insumo) {this.insumo=insumo;}
+    public void setInsumo(List<Insumo> insumo) {this.insumos=insumo;}
 
     //RELACION CITAS Y PRACTICAS
     @ManyToOne

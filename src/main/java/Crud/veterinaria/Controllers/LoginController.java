@@ -2,6 +2,7 @@ package Crud.veterinaria.Controllers;
 
 import Crud.veterinaria.Model.Usuario;
 import Crud.veterinaria.Service.UsuarioService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,21 @@ public class LoginController {
     public String login() {
         return "Login";
     }
+    @GetMapping("/Mascotas.html")
+    public String mascotas(HttpSession session, Model model) {
+        Long usuarioId = (Long) session.getAttribute("usuario_id"); // Obtiene el ID del usuario desde la sesión
+        model.addAttribute("usuario_id", usuarioId); // Agrega el ID del usuario al modelo para mascotas
+        return "Mascotas";
+    }
+
+
+    @GetMapping("/Citas.html")
+    public String citas(HttpSession session, Model model) {
+        Long usuarioId = (Long) session.getAttribute("usuario_id"); // Obtiene el ID del usuario desde la sesión
+        model.addAttribute("usuario_id", usuarioId); // Agrega el ID del usuario al modelo para citas
+        return "Citas";
+    }
+
 
 
     //CONSTRUCTOR
@@ -42,18 +58,18 @@ public class LoginController {
 
     //validacion de datos con base de datos
     @PostMapping("/submit-login")
-    public String login(@RequestParam("name") String name, @RequestParam("password") String password, Model model) {
+    public String login(@RequestParam("name") String name, @RequestParam("password") String password, Model model, HttpSession session) {
 
-        System.out.println("Intento de login - name: " + name + " - password: " + password);
+        System.out.println("Intento de login - nombre: " + name + " - contraseña: " + password);
         Usuario usuario = usuarioService.authenticate(name, password);
 
         if (usuario != null) {
-            System.out.println("ingresado CORRECTAMENTE - name: " + name + " - password: " + password);
+            System.out.println("Ingresado CORRECTAMENTE - nombre: " + name + " - contraseña: " + password);
             System.out.println("ID del usuario: " + usuario.getId());
-            model.addAttribute("usuario_id", usuario.getId()); // Agrega el ID del usuario al modelo
-            return "Main";
+            session.setAttribute("usuario_id", usuario.getId()); // Almacena el ID del usuario en la sesión
+            return "Usuario";
         } else {
-            System.out.println("INGRESO FALLIDO- name: " + name + " - password: " + password);
+            System.out.println("INGRESO FALLIDO - nombre: " + name + " - contraseña: " + password);
             return "Login";
         }
     }

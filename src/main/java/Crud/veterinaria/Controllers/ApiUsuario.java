@@ -1,8 +1,10 @@
 package Crud.veterinaria.Controllers;
 
 
+import Crud.veterinaria.Model.Mascota;
 import Crud.veterinaria.Model.Usuario;
 import Crud.veterinaria.Service.UsuarioService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,6 +53,8 @@ public class ApiUsuario {
         else
             return " No se ha eliminado el Usuario";
     }
+
+
 
     @DeleteMapping("/delete/all")
     public String deleteAllUsuario() {

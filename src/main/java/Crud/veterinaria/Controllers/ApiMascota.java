@@ -6,7 +6,6 @@ import Crud.veterinaria.Model.Usuario;
 import Crud.veterinaria.Service.MascotaService;
 import Crud.veterinaria.Service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -65,6 +64,7 @@ public class ApiMascota {
         else
             return " No se ha eliminado La Mascota";
     }
+
 
     @DeleteMapping("/delete/all")
     public String deleteAllMascota() {

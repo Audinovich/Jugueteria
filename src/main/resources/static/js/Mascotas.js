@@ -1,5 +1,9 @@
+
+
+
+
 function agregarMascota() {
-    // Obtienen los valores del formulario
+
     var nombre = document.getElementById('nombre').value;
     var especie = document.getElementById('especie').value;
     var sexo = document.getElementById('sexo').value;
@@ -8,11 +12,13 @@ function agregarMascota() {
     var color = document.getElementById('color').value;
 
     var usuarioId = document.getElementById('usuario_id').value;
+    console.log("el valor del usuario es " ,usuarioId);
 
     if (usuarioId) {  // Verifica si el elemento tiene un valor
         console.log(usuarioId);
     } else {
         console.log('El elemento usuario_id no tiene un valor');
+        console.log(usuarioId);
     }
 
     // Crea un objeto mascota con los valores del formulario
@@ -49,6 +55,9 @@ function agregarMascota() {
 
 function consultarMascotas() {
     var usuarioId = document.getElementById('usuario_id').value;
+    console.log('Valor de usuario_id:', usuarioId);
+
+
 
     // Hace una solicitud GET a la API para obtener las mascotas del cliente
     fetch('http://localhost:8080/Mascota/findAll/' + usuarioId, {

@@ -1,10 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refugio GatoPan - Un legado</title>
+    <link rel="stylesheet" th:href="@{/css/Style.css}">
 </head>
 <body>
+
+<input type="hidden" id="usuario_id" th:value="${usuario_id}">
+<div class="navbar">
+    <a th:href="@{/index.html}">Inicio</a>
+    <div class="dropdown">
+        <button class="dropbtn">Servicios
+            <i class="fa fa-caret-down"></i>
+        </button>
+    </div>
+    <a th:href="@{/Citas.html}">Citas</a>
+    <a th:href="@{/Mascotas.html}" id="Mascotas">Mascotas</a>
+    <a th:href="@{/MiPerfil.html}">Mi Perfil</a>
+    <a th:href="@{/Facturas.html}">Facturas</a>
+</div>
+<h1>Refugio GatoPan</h1>
+<p>Un Legado, Una promesa.</p>
+<div id="panelControl">
+    <h2>Panel de Control</h2>
+    <p>Selecciona una opción del menú para gestionar tus datos.</p>
+</div>
+
 
 </body>
 </html>
