@@ -5,7 +5,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function consultarMascotas() {
     var usuarioId = document.getElementById('usuario_id').value;
+    var citaId =  document.getElementById('cita_id').value;
     console.log('Valor de usuario_id:', usuarioId);
+    console.log('Valor de la citaID:', citaId);
 
     fetch('http://localhost:8080/Mascota/findAll/' + usuarioId, {
         method: 'GET',
@@ -75,46 +77,116 @@ function consultarMascotas() {
 }
 
 function mostrarCalendario(mascotaId, accion) {
-    // Aquí puedes mostrar un calendario para seleccionar la fecha y hora de la cita
-    // Una vez seleccionada la fecha y hora, puedes hacer la solicitud a la API
+    var calendarioDiv = document.createElement('div');
+    calendarioDiv.id = 'calendarioDiv';
+    document.body.appendChild(calendarioDiv);
 
-    var cita = {
-        mascotaId: mascotaId,
-        fecha: '2024-08-08T10:00:00', // Ejemplo de fecha y hora seleccionada
-        accion: accion
+    var inputFecha = document.createElement('input');
+    inputFecha.type = 'text';
+    inputFecha.id = 'fechaCita';
+    calendarioDiv.appendChild(inputFecha);
+
+    var picker = new Pikaday({
+        field: document.getElementById('fechaCita'),
+        format: 'YYYY-MM-DD',
+        onSelect: function(date) {
+            var fechaSeleccionada = moment(date).format('YYYY-MM-DD');
+            console.log(fechaSeleccionada);
+        }
+    });
+
+    var selectHora = document.createElement('select');
+    selectHora.id = 'horaCita';
+    calendarioDiv.appendChild(selectHora);
+
+    var horasDisponibles = generarHorasDisponibles();
+    horasDisponibles.forEach(hora => {
+        var option = document.createElement('option');
+        option.value = hora;
+        option.textContent = hora;
+        selectHora.appendChild(option);
+    });
+
+    var btnConfirmar = document.createElement('button');
+    btnConfirmar.textContent = 'Confirmar Cita';
+    btnConfirmar.onclick = function() {
+        var fechaSeleccionada = moment(inputFecha.value).format('YYYY-MM-DD');
+        var fechaHora = fechaSeleccionada + 'T' + selectHora.value + ':00';
+        var cita = {
+            mascota: {
+                id: mascotaId
+            },
+            fechaHora: fechaHora
+        };
+
+        var citaModificada = {
+            cita:{
+            id : citaId
+            },
+        fechaHora: fechaHora
+
+        };
+
+        console.log('el json de la cita es: ', cita);
+
+        if (accion === 'solicitar') {
+            fetch('http://localhost:8080/Citas/save', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(cita)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Cita solicitada:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        } else if (accion === 'modificar') {
+            fetch('http://localhost:8080/Citas/edit/' + 14, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(citaModificada)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Cita modificada:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
     };
+    calendarioDiv.appendChild(btnConfirmar);
+}
 
-    if (accion === 'solicitar') {
-        fetch('http://localhost:8080/Citas/save', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(cita)
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Cita solicitada:', data);
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
-    } else if (accion === 'modificar') {
-        fetch('http://localhost:8080/Citas/edit/' + mascotaId, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(cita)
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Cita modificada:', data);
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
+function generarHorasDisponibles() {
+    var horas = [];
+    var horaInicio = 8.5; // 8:30
+    var horaFin = 19; // 19:00
+
+    for (var i = horaInicio; i < horaFin; i += 0.5) {
+        var hora = Math.floor(i);
+        var minutos = (i % 1) * 60;
+        var horaFormateada = ('0' + hora).slice(-2) + ':' + ('0' + minutos).slice(-2);
+        horas.push(horaFormateada);
     }
+
+    return horas;
 }
 
 function eliminarCita(mascotaId) {
@@ -134,7 +206,8 @@ function eliminarCita(mascotaId) {
 }
 
 function consultarCitas(mascotaId, fila) {
-    fetch('http://localhost:8080/Citas/find/' + mascotaId, {
+    console.log('el id de la mascota es', mascotaId);
+    fetch('http://localhost:8080/Citas/findByMascota/' + mascotaId, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -148,7 +221,7 @@ function consultarCitas(mascotaId, fila) {
 
         data.forEach(cita => {
             var citaInfo = document.createElement('div');
-            citaInfo.textContent = 'Fecha: ' + cita.fecha + ', Estado: ' + cita.estado;
+            citaInfo.textContent = 'Fecha: ' + cita.fechaHora + ', Estado: ' + (cita.estado || 'Desconocido');
             celdaCitas.appendChild(citaInfo);
         });
     })

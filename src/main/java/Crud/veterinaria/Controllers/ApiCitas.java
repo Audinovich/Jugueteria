@@ -1,11 +1,11 @@
 package Crud.veterinaria.Controllers;
 
-
 import Crud.veterinaria.Model.Citas;
 import Crud.veterinaria.Service.CitasService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -17,7 +17,6 @@ public class ApiCitas {
     @Autowired
     CitasService citasService;
 
-
     @GetMapping("/all")
     public ArrayList<Citas> getAllCitas() {
         return citasService.getAllCitas();
@@ -28,25 +27,25 @@ public class ApiCitas {
         return citasService.findAllCitasByMascota(id);
     }
 
-    @PutMapping("/edit/{id}")
-    public Optional<Citas> updateCitas(@RequestParam Citas c, @PathVariable("id") long id) {
+    @PutMapping("/edit/{citaId}")
+    public Optional<Citas> updateCitas(@RequestParam Citas c, @PathVariable("citaId") long id) {
         return citasService.updateCitas(c, id);
-
     }
 
     @PostMapping("/save")
-    public Citas saveCitas (@RequestBody Citas c ){
-        return citasService.saveCitas(c);
+    public Citas saveCitas(@RequestBody Citas c, HttpSession session) {
+        Citas savedCita = citasService.saveCitas(c);
+        session.setAttribute("cita_id", savedCita.getId()); // Almacena el ID de la cita en la sesión
+        return savedCita;
     }
 
-
-    @GetMapping("/find/{id}")
-    public Optional<Citas> getCitasById(@PathVariable("id") long id) {
+    @GetMapping("/find/{citaId}")
+    public Optional<Citas> getCitasById(@PathVariable("citaId") long id) {
         return citasService.getCitasById(id);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public String deleteCitas(@PathVariable("id") long id) {
+    @DeleteMapping("/delete/{CitaId}")
+    public String deleteCitas(@PathVariable("CitaId") long id) {
         if (citasService.deleteCitas(id))
             return "Se ha Eliminado la cita";
         else
@@ -54,14 +53,12 @@ public class ApiCitas {
     }
 
     @DeleteMapping("/delete/all")
-            public String deleteAllCitas() {
+    public String deleteAllCitas() {
         boolean resultado = citasService.deleteAllCitas();
-
         if (resultado) {
             return "Se han eliminado todas las Citas";
-        }else{
+        } else {
             return "No se han podido eliminar las citas";
         }
     }
 }
-
