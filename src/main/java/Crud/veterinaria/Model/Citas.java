@@ -5,11 +5,12 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 public class Citas {
+
+    //TODO ELIMINAR 2 COLUMNAS FECHA Y HORA
 
     //RELACION MANY TO ONE ENTRE MUCHAS CITAS A UNA MASCOTA
 
@@ -17,6 +18,16 @@ public class Citas {
     @JsonBackReference
     @JoinColumn(name = "mascotaId")
     private Mascota mascota;
+
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    private long id;
+    private LocalDateTime fechaHora;
+
+
+
 
     public Mascota getMascota() {
         return mascota;
@@ -34,35 +45,31 @@ public class Citas {
         this.id = id;
     }
 
-    //RELACION ENTRE UNA CITA y UNA O MAS PRACTICAS
-    @OneToMany(mappedBy = "citas", cascade = CascadeType.ALL)
+    //RELACION ENTRE UNA CITA y UNA PRACTICAS
+    @OneToOne (cascade = CascadeType.ALL)
     @JsonManagedReference
+    @JoinColumn (name = "practica")
 
-    private List<Practica> practicas = new ArrayList<>();
-
-    public List<Practica> getPracticas() {
-        return practicas;
-    }
-
-    public void setPracticas(List<Practica> practicas) {
-        this.practicas = practicas;
-    }
+    private Practica practica;
 
     public Citas() {
     }
 
-    public Citas(Mascota mascota, List<Practica> practicas, long id, LocalDateTime fechaHora) {
+    public Citas(Mascota mascota, Practica practica, long id, LocalDateTime fechaHora) {
         this.mascota = mascota;
         this.id = id;
         this.fechaHora = fechaHora;
-        this.practicas=new ArrayList<>();
+        this.practica   = practica;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
 
-    private long id;
-    private LocalDateTime fechaHora;
+    public Practica getPractica() {
+        return practica;
+    }
+
+    public void setPractica(Practica practica) {
+        this.practica = practica;
+    }
 
     public Citas(LocalDateTime fechaHora) {
         this.fechaHora = fechaHora;

@@ -1,11 +1,14 @@
 package Crud.veterinaria.Controllers;
-
+import Crud.veterinaria.Service.PracticaService;
+import Crud.veterinaria.Model.Practica;
 import Crud.veterinaria.Model.Usuario;
 import Crud.veterinaria.Service.UsuarioService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 
 @CrossOrigin
 // MVC - FRONT END
@@ -28,20 +31,24 @@ public class LoginController {
         return "Login";
     }
     @GetMapping("/Mascotas.html")
-    public String mascotas(HttpSession session, Model model) {
+    public String mascotas(HttpSession session) {
         Long usuarioId = (Long) session.getAttribute("usuario_id"); // Obtiene el ID del usuario desde la sesión
-        model.addAttribute("usuario_id", usuarioId); // Agrega el ID del usuario al modelo para mascotas
+        session.setAttribute("usuario_id", usuarioId); // Almacena el ID del usuario en la sesión
         return "Mascotas";
     }
 
-
     @GetMapping("/Citas.html")
-    public String citas(HttpSession session, Model model) {
+    public String citas(HttpSession session) {
         Long usuarioId = (Long) session.getAttribute("usuario_id"); // Obtiene el ID del usuario desde la sesión
-        model.addAttribute("usuario_id", usuarioId); // Agrega el ID del usuario al modelo para citas
+        session.setAttribute("usuario_id", usuarioId); // Almacena el ID del usuario en la sesión
         return "Citas";
     }
 
+
+    @GetMapping("/all")
+    public String Practicas(){
+    return "Practicas";
+    };
 
 
     //CONSTRUCTOR

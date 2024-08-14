@@ -1,13 +1,11 @@
-
 document.addEventListener('DOMContentLoaded', function() {
     consultarMascotas();
 });
 
 function consultarMascotas() {
     var usuarioId = document.getElementById('usuario_id').value;
-    var citaId =  document.getElementById('cita_id').value;
+
     console.log('Valor de usuario_id:', usuarioId);
-    console.log('Valor de la citaID:', citaId);
 
     fetch('http://localhost:8080/Mascota/findAll/' + usuarioId, {
         method: 'GET',
@@ -44,16 +42,11 @@ function consultarMascotas() {
             var btnSolicitarCita = document.createElement('button');
             btnSolicitarCita.textContent = 'Solicitar Cita';
             btnSolicitarCita.onclick = function() {
-                mostrarCalendario(mascota.id, 'solicitar');
+                mostrarPracticas(mascota.id); // Llamar a mostrarPracticas cuando se haga clic en "Solicitar Cita"
             };
             acciones.appendChild(btnSolicitarCita);
 
-            var btnModificarCita = document.createElement('button');
-            btnModificarCita.textContent = 'Modificar Cita';
-            btnModificarCita.onclick = function() {
-                mostrarCalendario(mascota.id, 'modificar');
-            };
-            acciones.appendChild(btnModificarCita);
+
 
             var btnEliminarCita = document.createElement('button');
             btnEliminarCita.textContent = 'Eliminar Cita';
@@ -76,6 +69,54 @@ function consultarMascotas() {
     });
 }
 
+function mostrarPracticas(mascotaId) {
+    fetch('http://localhost:8080/Practica/all', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => {
+        console.log('Respuesta del servidor DE PRACTICAS:', response);
+        return response.json();
+    })
+    .then(data => {
+        console.log('Datos recibidos DESDE PRACTICAS:', data); // Aquí puedes ver los datos que trae el fetch
+        var tablaExistente = document.getElementById('tablaPracticas');
+        if (tablaExistente) {
+            tablaExistente.innerHTML = '';
+        }
+
+        // Crear el menú desplegable de prácticas
+        var selectPractica = document.createElement('select');
+        selectPractica.id = 'selectPractica';
+        selectPractica.style.width = '300px'; // Ajustar el ancho del menú desplegable
+        document.body.appendChild(selectPractica);
+
+        // Llenar el menú desplegable con las prácticas
+        data.forEach(practica => {
+            var option = document.createElement('option');
+            option.value = practica.id;
+            var nombre = practica.nombre || 'Nombre no disponible';
+            var descripcion = practica.descripcion || 'Descripción no disponible';
+            option.textContent = `${descripcion}`; // Mostrar nombre y descripción
+            selectPractica.appendChild(option);
+        });
+
+        // Agregar un evento para manejar la selección de una práctica
+        selectPractica.addEventListener('change', function() {
+            var practicaSeleccionada = selectPractica.value;
+            console.log('Práctica seleccionada:', practicaSeleccionada);
+
+            // Mostrar el calendario para seleccionar la fecha y hora
+            mostrarCalendario(mascotaId, 'solicitar');
+        });
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
 function mostrarCalendario(mascotaId, accion) {
     var calendarioDiv = document.createElement('div');
     calendarioDiv.id = 'calendarioDiv';
@@ -85,13 +126,18 @@ function mostrarCalendario(mascotaId, accion) {
     inputFecha.type = 'text';
     inputFecha.id = 'fechaCita';
     calendarioDiv.appendChild(inputFecha);
+    inputFecha.value = '';
 
+    var debounceTimeout;
     var picker = new Pikaday({
-        field: document.getElementById('fechaCita'),
+        field: inputFecha, // Asegúrate de que el campo esté correctamente referenciado
         format: 'YYYY-MM-DD',
         onSelect: function(date) {
-            var fechaSeleccionada = moment(date).format('YYYY-MM-DD');
-            console.log(fechaSeleccionada);
+            clearTimeout(debounceTimeout);
+            debounceTimeout = setTimeout(function() {
+                var fechaSeleccionada = moment(date).format('YYYY-MM-DD');
+                console.log(fechaSeleccionada);
+            }, 300); // Ajusta el retraso del debounce según sea necesario
         }
     });
 
@@ -112,19 +158,15 @@ function mostrarCalendario(mascotaId, accion) {
     btnConfirmar.onclick = function() {
         var fechaSeleccionada = moment(inputFecha.value).format('YYYY-MM-DD');
         var fechaHora = fechaSeleccionada + 'T' + selectHora.value + ':00';
+
         var cita = {
             mascota: {
                 id: mascotaId
             },
-            fechaHora: fechaHora
-        };
-
-        var citaModificada = {
-            cita:{
-            id : citaId
-            },
-        fechaHora: fechaHora
-
+            fechaHora: fechaHora,
+            practica: {
+                descripcion: "vacunacion"
+            }
         };
 
         console.log('el json de la cita es: ', cita);
@@ -149,26 +191,6 @@ function mostrarCalendario(mascotaId, accion) {
             .catch((error) => {
                 console.error('Error:', error);
             });
-        } else if (accion === 'modificar') {
-            fetch('http://localhost:8080/Citas/edit/' + 14, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(citaModificada)
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok ' + response.statusText);
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Cita modificada:', data);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
         }
     };
     calendarioDiv.appendChild(btnConfirmar);
@@ -188,7 +210,7 @@ function generarHorasDisponibles() {
 
     return horas;
 }
-
+//ELIMINA TODAS LAS CITAS CON EL ID DE LA MASCOTA
 function eliminarCita(mascotaId) {
     fetch('http://localhost:8080/Citas/delete/' + mascotaId, {
         method: 'DELETE',
@@ -204,7 +226,7 @@ function eliminarCita(mascotaId) {
         console.error('Error:', error);
     });
 }
-
+//CONSULTA TODAS LAS CITAS POR ID DE MASCOTA
 function consultarCitas(mascotaId, fila) {
     console.log('el id de la mascota es', mascotaId);
     fetch('http://localhost:8080/Citas/findByMascota/' + mascotaId, {

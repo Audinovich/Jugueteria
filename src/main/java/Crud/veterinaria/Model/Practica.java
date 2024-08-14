@@ -3,29 +3,30 @@ package Crud.veterinaria.Model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import org.hibernate.mapping.ToOne;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity// se va a trasnformar en BD
+@Entity
 public class Practica {
 
-
-    //RELACION UNA PRACTICA VARIOS INSUMOS
-    @OneToMany (mappedBy = "practica", cascade = CascadeType.ALL)
+    // Relación One-to-Many con Insumo
+    @OneToMany(mappedBy = "practica", cascade = CascadeType.ALL)
     @JsonManagedReference
-
     private List<Insumo> insumos = new ArrayList<>();
 
-    public List<Insumo> getInsumos(){return insumos;}
+    public List<Insumo> getInsumos() {
+        return insumos;
+    }
 
-    public void setInsumo(List<Insumo> insumo) {this.insumos=insumo;}
+    public void setInsumo(List<Insumo> insumo) {
+        this.insumos = insumo;
+    }
 
-    //RELACION CITAS Y PRACTICAS
-    @ManyToOne
-    @JsonBackReference
+    // Relación One-to-One con Citas
+    @OneToOne
     @JoinColumn(name = "citasId")
+    @JsonBackReference
     private Citas citas;
 
     public Citas getCitas() {
@@ -36,16 +37,14 @@ public class Practica {
         this.citas = citas;
     }
 
-    @Id // primary key
-//genera valor Id automaticamente
-@GeneratedValue(strategy = GenerationType.IDENTITY)//mediante la siguiente estrategia
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String practica;
     private String descripcion;
     private String precio;
 
     public Practica() {
-
     }
 
     public Practica(long id, String practica, String descripcion, String precio) {
@@ -87,5 +86,3 @@ public class Practica {
         this.precio = precio;
     }
 }
-
-

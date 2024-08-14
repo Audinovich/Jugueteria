@@ -13,6 +13,7 @@ import java.util.List;
 public class Mascota {
 
     // RELACION ONE TO MANY DE MASCOTAS A PRACTICAS
+
     @OneToMany(mappedBy = "mascota", cascade = CascadeType.ALL)
     @JsonManagedReference
 

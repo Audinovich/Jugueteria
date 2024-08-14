@@ -8,8 +8,8 @@
 </head>
 <body>
 
-<input type="hidden" id="usuario_id" th:value="${usuario_id}">
-<input type="hidden" id="cita_id" th:value="${cita_id}">
+<input type="hidden" id="usuario_id" th:value="${session.usuario_id}">
+<input type="hidden" id="cita_id" th:value="${session.cita_id}">
 <div class="navbar">
     <a th:href="@{/index.html}">Inicio</a>
     <div class="dropdown">

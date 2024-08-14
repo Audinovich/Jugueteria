@@ -3,8 +3,8 @@ package Crud.veterinaria.Controllers;
 
 import Crud.veterinaria.Model.Practica;
 import Crud.veterinaria.Service.PracticaService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -19,7 +19,10 @@ public class ApiPractica {
 
 
     @GetMapping("/all")
-    public ArrayList<Practica> getAllPractica() {
+    public ArrayList<Practica> getAllPractica(HttpSession session, @RequestParam(value = "practica_id", required = false) String practicaId) {
+        if (practicaId != null) {
+            session.setAttribute("practica_id", practicaId); // Almacena el ID de la práctica en la sesión
+        }
         return practicaService.getAllPractica();
     }
 
