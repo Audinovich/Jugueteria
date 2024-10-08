@@ -55,7 +55,6 @@ public class ApiUsuario {
     }
 
 
-
     @DeleteMapping("/delete/all")
     public String deleteAllUsuario() {
         boolean resultado = usuarioService.deleteAllUsuario();

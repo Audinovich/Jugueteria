@@ -2,8 +2,10 @@ package Crud.veterinaria.Service;
 
 import Crud.veterinaria.Model.Citas;
 import Crud.veterinaria.Model.Mascota;
+import Crud.veterinaria.Model.Practica;
 import Crud.veterinaria.Repository.CitasRepository;
 import Crud.veterinaria.Repository.MascotaRepository;
+import Crud.veterinaria.Repository.PracticaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,8 @@ public class CitasServiceImpl implements CitasService {
     @Autowired
     MascotaRepository mascotaRepository;
 
+    @Autowired
+    PracticaRepository practicaRepository;
 
     @Override
     public ArrayList<Citas> getAllCitas() {
@@ -32,11 +36,6 @@ public class CitasServiceImpl implements CitasService {
 
         if (citaOptional.isPresent()) {
             Citas citaEncontrada = citaOptional.get();
-
-            List<Mascota> listaDeMascotas = (List<Mascota>) mascotaRepository.findAllMascotaByUsuario(citaEncontrada.getId());
-
-            citaEncontrada.setMascotas(listaDeMascotas);
-
             return Optional.of(citaEncontrada);
 
         }
@@ -44,9 +43,8 @@ public class CitasServiceImpl implements CitasService {
     }
 
     @Override
-    public Optional<Citas> updateCitas(Citas c, long id) {
+    public Optional<Citas> updateCitas(Citas c,   long id) {
         Optional<Citas> citaEncontrada = citasRepository.findById(id);
-
         if (citaEncontrada.isPresent()) {
             Citas citaActualizada = citaEncontrada.get();
             citaActualizada.setMascota(c.getMascota());
@@ -58,16 +56,21 @@ public class CitasServiceImpl implements CitasService {
     }
 
     @Override
-    public Citas saveCitas(Citas c) {
-        Citas citaGuardada = citasRepository.save(c);
-        return citaGuardada;
+    public Citas saveCitas(Citas c,Integer idPractica) {
+        Optional <Practica> practicaEncontrada=  practicaRepository.findById(idPractica.longValue());
+       if(practicaEncontrada.isPresent()) {
+           c.setPractica(practicaEncontrada.get());
+       }else{
+           throw new RuntimeException("Práctica no encontrada");
+         }
+        return citasRepository.save(c);
     }
 
     @Override
     public boolean deleteCitas(long id) {
         try {
             Optional<Citas> c = getCitasById(id);
-            citasRepository.deleteAll();
+            citasRepository.deleteById(id);
             return true;
         } catch (Exception e) {
             return false;

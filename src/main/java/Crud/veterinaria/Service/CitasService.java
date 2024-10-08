@@ -13,7 +13,7 @@ public interface CitasService {
 
     Optional<Citas> updateCitas(Citas c, long id);
 
-    Citas saveCitas(Citas c);
+    Citas saveCitas(Citas c,Integer idPractica);
 
     boolean deleteCitas(long id);
 

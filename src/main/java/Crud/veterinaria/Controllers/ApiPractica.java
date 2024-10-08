@@ -33,10 +33,9 @@ public class ApiPractica {
     }
 
     @GetMapping("/find/{id}")
-    public Optional <Practica> getPracticaById (@PathVariable("id") long id){
+    public Optional<Practica> getPracticaById(@PathVariable("id") long id) {
         return practicaService.getPracticaById(id);
     }
-
 
 
     @PutMapping("/edith/{id}")
@@ -59,14 +58,14 @@ public class ApiPractica {
     }
 
     @DeleteMapping("/delete/all")
-    public String deleteAllPractica (){
+    public String deleteAllPractica() {
         boolean resultado = practicaService.deleteAllPractica();
 
-    if(resultado){
-        return "Se han eliminado todas las Practicas";
-    }else{
-        return "No Se han podido eliminar las Practicas";
-    }
+        if (resultado) {
+            return "Se han eliminado todas las Practicas";
+        } else {
+            return "No Se han podido eliminar las Practicas";
+        }
     }
 
 }

@@ -1,4 +1,5 @@
 package Crud.veterinaria.Controllers;
+
 import Crud.veterinaria.Service.PracticaService;
 import Crud.veterinaria.Model.Practica;
 import Crud.veterinaria.Model.Usuario;
@@ -30,6 +31,7 @@ public class LoginController {
     public String login() {
         return "Login";
     }
+
     @GetMapping("/Mascotas.html")
     public String mascotas(HttpSession session) {
         Long usuarioId = (Long) session.getAttribute("usuario_id"); // Obtiene el ID del usuario desde la sesión
@@ -46,9 +48,11 @@ public class LoginController {
 
 
     @GetMapping("/all")
-    public String Practicas(){
-    return "Practicas";
-    };
+    public String Practicas() {
+        return "Practicas";
+    }
+
+    ;
 
 
     //CONSTRUCTOR

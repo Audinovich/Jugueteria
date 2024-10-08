@@ -8,20 +8,6 @@ import jakarta.persistence.*;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Insumo {
 
-    @ManyToOne
-    @JsonBackReference
-    @JoinColumn(name = "practicaId", nullable = true)
-
-    private Practica practica;
-
-    public Practica getPractica() {
-        return practica;
-    }
-
-    public void setPractica(Practica practica) {
-        this.practica = practica;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -41,6 +27,22 @@ public class Insumo {
         this.cantidad = cantidad;
         this.precio = precio;
     }
+
+    @ManyToOne
+    @JsonBackReference
+    @JoinColumn(name = "practicaId", nullable = true)
+
+    private Practica practica;
+
+    public Practica getPractica() {
+        return practica;
+    }
+
+    public void setPractica(Practica practica) {
+        this.practica = practica;
+    }
+
+
 
     public long getPrecio() {
         return precio;
