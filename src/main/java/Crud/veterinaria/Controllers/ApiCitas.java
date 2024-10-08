@@ -33,8 +33,8 @@ public class ApiCitas {
     }
 
     @PostMapping("/save")
-    public Citas saveCitas(@RequestBody Citas c, HttpSession session) {
-        Citas savedCita = citasService.saveCitas(c);
+    public Citas saveCitas(@RequestBody Citas c,@RequestParam("idPractica") Integer idPractica, HttpSession session) {
+        Citas savedCita = citasService.saveCitas(c,idPractica);
         session.setAttribute("cita_id", savedCita.getId()); // Almacena el ID de la cita en la sesión
         return savedCita;
     }

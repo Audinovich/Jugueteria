@@ -9,20 +9,6 @@ import java.util.List;
 @Entity // se va a transformar en BD
 public class Usuario {
 
-    //Crea relacion OneToMany de usuarios a mascotas
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
-    @JsonManagedReference
-
-    private List<Mascota> mascotas = new ArrayList<>();
-
-    public List<Mascota> getMascotas() {
-        return mascotas;
-    }
-
-    public void setMascotas(List<Mascota> mascotas) {
-        this.mascotas = mascotas;
-    }
-
     @Id
 //genera valor id automaticamente- solo impacta al primer atributo
 
@@ -49,6 +35,22 @@ public class Usuario {
         this.address = address;
         this.phone = phone;
     }
+
+    //Crea relacion OneToMany de usuarios a mascotas
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    @JsonManagedReference
+
+    private List<Mascota> mascotas = new ArrayList<>();
+
+    public List<Mascota> getMascotas() {
+        return mascotas;
+    }
+
+    public void setMascotas(List<Mascota> mascotas) {
+        this.mascotas = mascotas;
+    }
+
+
 
     public long getId() {
         return id;

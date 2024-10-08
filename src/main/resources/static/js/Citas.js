@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
     consultarMascotas();
 });
+var practicaSeleccionadaId;
+var selectPractica = document.getElementById('selectPractica');
 
 function consultarMascotas() {
     var usuarioId = document.getElementById('usuario_id').value;
@@ -153,11 +155,17 @@ function mostrarCalendario(mascotaId, accion) {
         selectHora.appendChild(option);
     });
 
+
     var btnConfirmar = document.createElement('button');
     btnConfirmar.textContent = 'Confirmar Cita';
     btnConfirmar.onclick = function() {
         var fechaSeleccionada = moment(inputFecha.value).format('YYYY-MM-DD');
         var fechaHora = fechaSeleccionada + 'T' + selectHora.value + ':00';
+
+        if (!practicaSeleccionadaId) {
+            console.error('Error: No se ha seleccionado una práctica.');
+            return;
+        }
 
         var cita = {
             mascota: {
@@ -165,14 +173,14 @@ function mostrarCalendario(mascotaId, accion) {
             },
             fechaHora: fechaHora,
             practica: {
-                descripcion: "vacunacion"
+                id: practicaSeleccionada
             }
         };
 
-        console.log('el json de la cita es: ', cita);
+        console.log('El JSON de la cita es: ', cita);
 
         if (accion === 'solicitar') {
-            fetch('http://localhost:8080/Citas/save', {
+            fetch(`http://localhost:8080/Citas/save?idPractica=${practicaSeleccionada}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -194,7 +202,7 @@ function mostrarCalendario(mascotaId, accion) {
         }
     };
     calendarioDiv.appendChild(btnConfirmar);
-}
+ }
 
 function generarHorasDisponibles() {
     var horas = [];

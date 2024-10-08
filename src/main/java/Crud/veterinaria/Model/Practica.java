@@ -1,6 +1,5 @@
 package Crud.veterinaria.Model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -9,33 +8,6 @@ import java.util.List;
 
 @Entity
 public class Practica {
-
-    // Relación One-to-Many con Insumo
-    @OneToMany(mappedBy = "practica", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private List<Insumo> insumos = new ArrayList<>();
-
-    public List<Insumo> getInsumos() {
-        return insumos;
-    }
-
-    public void setInsumo(List<Insumo> insumo) {
-        this.insumos = insumo;
-    }
-
-    // Relación One-to-One con Citas
-    @OneToOne
-    @JoinColumn(name = "citasId")
-    @JsonBackReference
-    private Citas citas;
-
-    public Citas getCitas() {
-        return citas;
-    }
-
-    public void setCitas(Citas citas) {
-        this.citas = citas;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,6 +25,21 @@ public class Practica {
         this.descripcion = descripcion;
         this.precio = precio;
     }
+
+
+    // Relación One-to-Many con Insumo
+    @OneToMany(mappedBy = "practica", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Insumo> insumos = new ArrayList<>();
+
+    public List<Insumo> getInsumos() {
+        return insumos;
+    }
+
+    public void setInsumo(List<Insumo> insumo) {
+        this.insumos = insumo;
+    }
+
 
     public long getId() {
         return id;

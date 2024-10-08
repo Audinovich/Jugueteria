@@ -4,13 +4,34 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity// se va a transformar en registro de BD
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Mascota {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    private String nombre;
+    private String especie;
+    private String sexo;
+    private String edad;
+    private String raza;
+    private String color;
+
+
+
 
     // RELACION ONE TO MANY DE MASCOTAS A PRACTICAS
 
@@ -44,31 +65,7 @@ public class Mascota {
     }
 
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    private String nombre;
-    private String especie;
-    private String sexo;
-    private String edad;
-    private String raza;
-    private String color;
 
-
-    public Mascota() {
-
-    }
-
-    public Mascota(long id, String nombre, String especie, String sexo, String edad, String raza, String color) {
-        this.id = id;
-        this.nombre = nombre;
-        this.especie = especie;
-        this.sexo = sexo;
-        this.edad = edad;
-        this.raza = raza;
-        this.color = color;
-        this.citas = new ArrayList<>();
-    }
 
     public long getId() {
         return id;

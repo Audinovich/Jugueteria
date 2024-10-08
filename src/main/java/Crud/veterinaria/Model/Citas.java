@@ -1,14 +1,27 @@
 package Crud.veterinaria.Model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Citas {
+
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
 
     //TODO ELIMINAR 2 COLUMNAS FECHA Y HORA
 
@@ -17,15 +30,17 @@ public class Citas {
     @ManyToOne
     @JsonBackReference
     @JoinColumn(name = "mascotaId")
-    private Mascota mascota;
-
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-    private long id;
+        private Mascota mascota;
     private LocalDateTime fechaHora;
 
+
+    //RELACION ENTRE UNA CITA y UNA PRACTICA
+    //CASCADE PERMITE AFECTAR A LOS HIJOS TAMBIEN EN LAS MODIFICACIONES EN ESTE CASO PRACTICA
+    @OneToOne(cascade = CascadeType.ALL)
+    // @JsonManagedReference
+    @JoinColumn(name = "practica")
+
+    private Practica practica;
 
 
 
@@ -45,35 +60,6 @@ public class Citas {
         this.id = id;
     }
 
-    //RELACION ENTRE UNA CITA y UNA PRACTICAS
-    @OneToOne (cascade = CascadeType.ALL)
-    @JsonManagedReference
-    @JoinColumn (name = "practica")
-
-    private Practica practica;
-
-    public Citas() {
-    }
-
-    public Citas(Mascota mascota, Practica practica, long id, LocalDateTime fechaHora) {
-        this.mascota = mascota;
-        this.id = id;
-        this.fechaHora = fechaHora;
-        this.practica   = practica;
-    }
-
-
-    public Practica getPractica() {
-        return practica;
-    }
-
-    public void setPractica(Practica practica) {
-        this.practica = practica;
-    }
-
-    public Citas(LocalDateTime fechaHora) {
-        this.fechaHora = fechaHora;
-    }
 
     public LocalDateTime getFechaHora() {
         return fechaHora;
@@ -90,5 +76,16 @@ public class Citas {
 
     public void setMascotas(List<Mascota> listaDeMascotas) {
     }
+
+
+    public Practica getPractica() {
+        return practica;
+    }
+
+    public void setPractica(Practica practica) {
+        this.practica = practica;
+    }
+
+
 }
 
